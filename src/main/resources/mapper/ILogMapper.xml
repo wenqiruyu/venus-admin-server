@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.server.venus.mapper.IVenusLogMapper">
+    <resultMap id="logResultMap" type="com.server.venus.vo.VenusLogVO">
+        <result column="log_name" jdbcType="VARCHAR" property="logName"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="user_ip" jdbcType="VARCHAR" property="userIp"/>
+        <result column="api_name" jdbcType="VARCHAR" property="api"/>
+        <result column="method_name" jdbcType="VARCHAR" property="methodName"/>
+        <result column="request_type" jdbcType="INTEGER" property="requestType"/>
+        <result column="message" jdbcType="INTEGER" property="message"/>
+        <result column="exception_msg" jdbcType="INTEGER" property="exceptionMsg"/>
+        <result column="create_time" jdbcType="INTEGER" property="createTime"/>
+    </resultMap>
+
+    <sql id="logList">
+        log_name, user_name, user_ip, api_name, method_name, request_type, message,
+        exception_msg, enabled, create_time, update_time, create_by, last_update_by
+    </sql>
+
+    <sql id="logValuesList">
+        #{logName}, #{userName}, #{userIp}, #{api}, #{methodName}, #{requestType}, #{message},
+        #{exceptionMsg}, #{isEnable}, #{createTime}, #{createBy}, #{updateTime}, #{lastUpdateBy}
+    </sql>
+
+    <insert id="addVenusLog" parameterType="com.server.venus.entity.Log">
+        insert into venus_operation_log(
+            <include refid="logList"/>
+        ) values(
+            <include refid="logValuesList"/>
+        )
+    </insert>
+</mapper>

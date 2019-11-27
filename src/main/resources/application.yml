@@ -1,0 +1,26 @@
+server:
+  port: 10001
+  servlet:
+    context-path: /venus-admin-server
+
+spring:
+  application:
+    name: venus-server
+  devtools:
+    restart:
+      enabled: true  #���ÿ����Ȳ���
+  freemarker:
+    cache: false    #ҳ�治���ػ��棬�޸ļ�ʱ��Ч
+  datasource:
+    url: jdbc:mysql://localhost/venus?characterEncoding=utf-8&useSSl=false&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:10000/eureka/
+
+swagger2:
+  enable: true

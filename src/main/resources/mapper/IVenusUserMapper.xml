@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.server.venus.mapper.IVenusUserMapper">
+    <resultMap id="userResultMap" type="com.server.venus.vo.VenusUserVO">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="telePhone" jdbcType="VARCHAR" property="telePhone"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="userFace" jdbcType="VARCHAR" property="userFace"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+    </resultMap>
+
+    <sql id="venusUser">
+        id, phone, telePhone, address, username, password, userFace, remark
+    </sql>
+
+    <sql id="venusUserList">
+        userRole.id userRole.phone, userRole.telePhone, userRole.address,
+        userRole.username, userRole.userFace, userRole.remark
+    </sql>
+
+    <sql id="userRole">
+        user_id, role_id
+    </sql>
+
+    <select id="getPageUser" resultMap="userResultMap">
+        SELECT
+        <include refid="venusUser"/>
+        FROM venus_user
+    </select>
+
+    <!--<select id="getPageUser" resultMap="userResultMap">
+        SELECT r.name as roleName, r.nameZh, <include refid="permissionUserList" />
+        FROM role r, (
+            SELECT <include refid="userRole" />, permission.<include refid="permissionUser" />
+            FROM user_role, (
+                SELECT <include refid="permissionUser" />
+                FROM permission_user
+            ) permission
+            WHERE user_id = permission.id
+        ) userRole
+        WHERE userRole.role_id = r.id
+    </select>-->
+
+    <select id="getUserByName" resultMap="userResultMap">
+        SELECT
+        <include refid="venusUser"/>
+        FROM venus_user
+        WHERE username = #{username}
+    </select>
+
+    <!--<select id="getUserByName" resultMap="userResultMap">
+        SELECT r.name as roleName, r.nameZh, <include refid="permissionUserList" />
+        FROM role r, (
+            SELECT <include refid="userRole" />, permission.<include refid="permissionUser" />
+            FROM user_role, (
+                SELECT <include refid="permissionUser" />
+                FROM permission_user
+                WHERE username = #{username}
+            ) permission
+            WHERE user_id = permission.id
+        ) userRole
+        WHERE userRole.role_id = r.id
+    </select>-->
+
+    <insert id="addVenusUser">
+        insert into venus_user(username, password)
+        values(#{username}, #{password})
+    </insert>
+
+</mapper>
