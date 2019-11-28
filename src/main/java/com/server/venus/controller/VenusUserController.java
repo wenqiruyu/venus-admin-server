@@ -1,6 +1,7 @@
 package com.server.venus.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.server.venus.annotation.LogAnnotation;
 import com.server.venus.enums.ResultCodeEnum;
 import com.server.venus.service.IVenusUserService;
 import com.server.venus.vo.LoginUserVO;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -32,7 +34,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/user")
-@Api(tags = "[1]启明星用户模块", position = 1)
+@Api(tags = "【1】启明星用户模块", position = 1)
 public class VenusUserController {
 
     private static final Logger logger = LoggerFactory.getLogger(VenusUserController.class);
@@ -48,9 +50,10 @@ public class VenusUserController {
      * @author yingx
      * @date 2019/10/25
      */
+    @LogAnnotation(value = "用户注册")
     @PostMapping("/register")
     @ApiOperation(value = "用户注册", notes = "开放用户注册功能", position = 2)
-    public ResultVO register(@RequestBody RegisterUserVO registerUserVO) {
+    public ResultVO register(@RequestBody RegisterUserVO registerUserVO, HttpServletRequest request) {
 
         logger.info("VenusUserController register start ... Username:{}, Password:{}",
                 registerUserVO.getUsername(), StringUtils.isBlank(registerUserVO.getPassword()) ? null : "******");
@@ -60,11 +63,13 @@ public class VenusUserController {
         // 用户注册需将用户密码进行加密
         registerUserVO.setPassword(new BCryptPasswordEncoder().encode(registerUserVO.getPassword()));
         try {
-            venusUserService.addVenusUser(registerUserVO);
             // 注册成功，为其分配默认角色
             VenusUserVO userByName = venusUserService.getUserByName(registerUserVO.getUsername());
             if (userByName == null) {
-
+                venusUserService.addVenusUser(registerUserVO);
+            } else {
+                logger.info("VenusUserController register end ... result:{}", "注册失败,用户名已存在");
+                return ResultVO.fail("注册失败,用户名已存在");
             }
             return ResultVO.success();
         } catch (Exception e) {

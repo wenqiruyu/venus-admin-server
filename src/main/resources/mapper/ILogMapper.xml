@@ -20,7 +20,7 @@
 
     <sql id="logValuesList">
         #{logName}, #{userName}, #{userIp}, #{api}, #{methodName}, #{requestType}, #{message},
-        #{exceptionMsg}, #{isEnable}, #{createTime}, #{createBy}, #{updateTime}, #{lastUpdateBy}
+        #{exceptionMsg}, #{isEnable}, #{createTime}, #{updateTime}, #{createBy}, #{lastUpdateBy}
     </sql>
 
     <insert id="addVenusLog" parameterType="com.server.venus.entity.Log">

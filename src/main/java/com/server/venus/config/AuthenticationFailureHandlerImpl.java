@@ -32,6 +32,7 @@ public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHa
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
 
         ResultVO resultVo = ResultVO.fail("用户登录失败!");
+        response.setCharacterEncoding("utf-8");
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(objectMapper.writeValueAsString(resultVo));
     }

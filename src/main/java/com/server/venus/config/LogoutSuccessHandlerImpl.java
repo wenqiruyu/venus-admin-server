@@ -28,6 +28,8 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JSON.toJSONString(ResultVO.success(ResultEnum.USER_LOGOUT_SUCCESS)));
     }
 

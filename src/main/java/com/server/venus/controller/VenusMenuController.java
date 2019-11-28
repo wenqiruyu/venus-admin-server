@@ -28,7 +28,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/menu")
-@Api(tags = "[2]启明星菜单模块", position = 1)
+@Api(tags = "【2】启明星菜单模块", position = 1)
 public class VenusMenuController {
 
     private static final Logger logger = LoggerFactory.getLogger(VenusUserController.class);

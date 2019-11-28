@@ -28,6 +28,8 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("application/json;charset=utf-8");
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         String jwtToken = TokenUtils.getToken(userDetails.getUsername(), false);
         response.getWriter().write(JSON.toJSONString(ResultVO.success(jwtToken)));

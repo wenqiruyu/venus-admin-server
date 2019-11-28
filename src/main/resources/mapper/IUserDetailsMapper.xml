@@ -18,11 +18,11 @@
         <result column="nameZh" jdbcType="VARCHAR" property="nameZh"/>
     </resultMap>
 
-    <sql id="permissionUser">
+    <sql id="venusUser">
         id, phone, telePhone, address, username, password, userFace, remark
     </sql>
 
-    <sql id="permissionUserList">
+    <sql id="venusUserList">
         userRole.id, userRole.phone, userRole.telePhone, userRole.address,
         userRole.username, userRole.password, userRole.userFace, userRole.remark
     </sql>
@@ -32,11 +32,11 @@
     </sql>
 
     <select id="getUserByName" resultMap="userResultMap">
-        SELECT r.name as roleName, r.nameZh, <include refid="permissionUserList" />
+        SELECT r.role_name_en as roleName, r.role_name_zh, <include refid="venusUserList" />
         FROM venus_role r, (
-            SELECT <include refid="userRole" />, permission.<include refid="permissionUser" />
+            SELECT <include refid="userRole" />, vu.<include refid="venusUser" />
             FROM venus_user_role, (
-                SELECT <include refid="permissionUser" />
+                SELECT <include refid="venusUser" />
                 FROM venus_user
                 WHERE username = #{username}
             ) vu

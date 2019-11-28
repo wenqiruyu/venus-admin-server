@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/log")
-@Api(tags = "[1]启明星日志模块", position = 1)
+@Api(tags = "【3】启明星日志模块", position = 1)
 public class VenusLogController {
 
     public ResultVO getLoginLog() {

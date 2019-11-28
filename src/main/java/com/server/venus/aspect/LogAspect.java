@@ -1,5 +1,6 @@
 package com.server.venus.aspect;
 
+import com.alibaba.fastjson.JSON;
 import com.server.venus.annotation.LogAnnotation;
 import com.server.venus.entity.Log;
 import com.server.venus.enums.ResultEnum;
@@ -9,17 +10,22 @@ import com.server.venus.utils.TokenUtils;
 import com.server.venus.vo.ResultVO;
 import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.NamedThreadLocal;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.util.Enumeration;
 
 /**
  * 项目名称：venus-admin-server
@@ -33,6 +39,7 @@ import java.lang.reflect.Method;
  */
 @Aspect
 @Component
+@Order(30)
 public class LogAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(LogAspect.class);
@@ -44,7 +51,6 @@ public class LogAspect {
 
     @Pointcut("@annotation(com.server.venus.annotation.LogAnnotation)")
     public void controllerAspect() {
-
     }
 
     /**
@@ -61,8 +67,12 @@ public class LogAspect {
         try {
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
             String token = request.getHeader("token");
-            // 操作用户名
-            String username = TokenUtils.getUsernameByToken(token);
+            Object[] args = joinPoint.getArgs();
+            // 操作用户名 用户的登陆注册没有token
+            String username = "admin";
+            if (StringUtils.isNotBlank(token)) {
+                username = TokenUtils.getUsernameByToken(token);
+            }
             String ip = IpUtils.getIpAddr(request);
             // 方法名称
             String methodName = joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName();
@@ -80,6 +90,8 @@ public class LogAspect {
             log.setRequestType(method);
             log.setExceptionMsg("无异常");
             log.setIsEnable(1);
+            log.setCreateBy(username);
+            log.setLastUpdateBy(username);
         } catch (ClassNotFoundException e) {
             logger.error("LogAspect doBefore error ...", e);
         }
@@ -99,7 +111,7 @@ public class LogAspect {
         // 处理完请求，返回内容
         ResultVO result = (ResultVO) ret;
         // 保存返回结果
-        log.setMessage((String) ret);
+        log.setMessage(JSON.toJSONString(ret));
         // 异常原因
         if (!StringUtils.equals(result.getCode(), ResultEnum.SUCCESS.getCode())) {
             log.setIsEnable(2);
@@ -128,7 +140,7 @@ public class LogAspect {
             if (method.getName().equals(methodName)) {
                 Class[] clazzs = method.getParameterTypes();
                 if (clazzs.length == arguments.length) {
-                    description = method.getAnnotation(LogAnnotation.class).description();
+                    description = method.getAnnotation(LogAnnotation.class).value();
                     break;
                 }
             }

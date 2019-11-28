@@ -1,6 +1,5 @@
 package com.server.venus.filter;
 
-import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.venus.utils.Constants;
 import com.server.venus.utils.TokenUtils;
@@ -8,6 +7,7 @@ import com.server.venus.vo.LoginUserVO;
 import com.server.venus.vo.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,6 +36,8 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
 
     private static final Logger logger = LoggerFactory.getLogger(CustomUsernamePasswordAuthenticationFilter.class);
 
+    private ObjectMapper objectMapper = new ObjectMapper();
+
     private AuthenticationManager authenticationManager;
 
     public CustomUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager) {
@@ -62,15 +64,20 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
 
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("application/json;charset=utf-8");
         UserDetails userDetail = (UserDetails) authResult.getPrincipal();
         String token = TokenUtils.getToken(userDetail.getUsername(), false);
         response.setHeader("token", Constants.TOKEN_PREFIX + token);
-        response.getWriter().write(JSON.toJSONString(ResultVO.success(Constants.TOKEN_PREFIX + token)));
+//        response.getWriter().write(JSON.toJSONString(ResultVO.success(Constants.TOKEN_PREFIX + token)));
+        response.getWriter().write(objectMapper.writeValueAsString(ResultVO.success(Constants.TOKEN_PREFIX + token)));
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
 
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("application/json;charset=utf-8");
         response.getWriter().write("authentication failed, reason: " + failed.getMessage());
     }
 }

@@ -26,7 +26,10 @@ import java.io.IOException;
 public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
 
     @Override
-    public void commence(HttpServletRequest Request, HttpServletResponse Response, AuthenticationException e) throws IOException, ServletException {
-        Response.getWriter().write(JSON.toJSONString(ResultVO.fail(ResultEnum.USER_NEED_AUTHORITIES)));
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
+
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("application/json; charset=utf-8");
+        response.getWriter().write(JSON.toJSONString(ResultVO.fail(ResultEnum.USER_NEED_AUTHORITIES)));
     }
 }

@@ -21,5 +21,5 @@ public @interface LogAnnotation {
     /**
      * 用户操作的步骤说明
      */
-    String description() default "";
+    String value() default "";
 }
