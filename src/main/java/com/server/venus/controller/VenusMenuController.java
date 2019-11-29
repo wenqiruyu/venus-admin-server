@@ -54,10 +54,11 @@ public class VenusMenuController {
             allMenu = venusMenuService.getAllMenu();
         } catch (Exception e) {
             logger.error("VenusMenuController getAllMenu error ...！", e);
-            ResultVO.fail("系统错误！");
+//            ResultVO.fail("系统错误！");
         }
         logger.info("VenusMenuController getAllMenu end ...Result:{}", allMenu);
-        return ResultVO.success(allMenu);
+//        return ResultVO.success(allMenu);
+        return null;
     }
 
     /**
@@ -78,9 +79,10 @@ public class VenusMenuController {
             menuByUser = venusMenuService.getMenuByUser(venusUserVO);
         } catch (Exception e) {
             logger.error("VenusMenuController getMenuByUser error ...", e);
-            ResultVO.fail("系统错误！");
+//            ResultVO.fail("系统错误！");
         }
         logger.info("VenusMenuController getMenuByUser end ...Result:{}", menuByUser);
-        return ResultVO.success(menuByUser);
+//        return ResultVO.success(menuByUser);
+        return null;
     }
 }

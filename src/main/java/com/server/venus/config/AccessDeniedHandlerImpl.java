@@ -1,8 +1,6 @@
 package com.server.venus.config;
 
 import com.alibaba.fastjson.JSON;
-import com.server.venus.enums.ResultEnum;
-import com.server.venus.vo.ResultVO;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
@@ -30,6 +28,6 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
 
         response.setCharacterEncoding("utf-8");
         response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JSON.toJSONString(ResultVO.fail(ResultEnum.USER_NO_ACCESS)));
+//        response.getWriter().write(JSON.toJSONString(ResultVO.fail(ResultEnum.USER_NO_ACCESS)));
     }
 }

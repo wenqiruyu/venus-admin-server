@@ -1,7 +1,6 @@
 package com.server.venus.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.server.venus.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -31,10 +30,10 @@ public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHa
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
 
-        ResultVO resultVo = ResultVO.fail("用户登录失败!");
+//        ResultVO resultVo = ResultVO.fail("用户登录失败!");
         response.setCharacterEncoding("utf-8");
         response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(objectMapper.writeValueAsString(resultVo));
+//        response.getWriter().write(objectMapper.writeValueAsString(resultVo));
     }
 
 }

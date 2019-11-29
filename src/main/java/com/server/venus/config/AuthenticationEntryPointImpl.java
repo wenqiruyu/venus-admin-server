@@ -1,8 +1,6 @@
 package com.server.venus.config;
 
 import com.alibaba.fastjson.JSON;
-import com.server.venus.enums.ResultEnum;
-import com.server.venus.vo.ResultVO;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -30,6 +28,6 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
 
         response.setCharacterEncoding("utf-8");
         response.setContentType("application/json; charset=utf-8");
-        response.getWriter().write(JSON.toJSONString(ResultVO.fail(ResultEnum.USER_NEED_AUTHORITIES)));
+//        response.getWriter().write(JSON.toJSONString(ResultVO.fail(ResultEnum.USER_NEED_AUTHORITIES)));
     }
 }

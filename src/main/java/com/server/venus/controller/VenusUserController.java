@@ -2,12 +2,11 @@ package com.server.venus.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.server.venus.annotation.LogAnnotation;
-import com.server.venus.enums.ResultCodeEnum;
+import com.server.venus.enums.ExceptionEnum;
+import com.server.venus.enums.ResultEnum;
+import com.server.venus.exception.ExtenException;
 import com.server.venus.service.IVenusUserService;
-import com.server.venus.vo.LoginUserVO;
-import com.server.venus.vo.RegisterUserVO;
-import com.server.venus.vo.ResultVO;
-import com.server.venus.vo.VenusUserVO;
+import com.server.venus.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -57,24 +56,21 @@ public class VenusUserController {
 
         logger.info("VenusUserController register start ... Username:{}, Password:{}",
                 registerUserVO.getUsername(), StringUtils.isBlank(registerUserVO.getPassword()) ? null : "******");
-        if (registerUserVO == null || StringUtils.isBlank(registerUserVO.getUsername()) || StringUtils.isBlank(registerUserVO.getPassword())) {
-            return ResultVO.fail(ResultCodeEnum.PARAMS_ERROR_NULL);
+        if (StringUtils.isBlank(registerUserVO.getUsername()) || StringUtils.isBlank(registerUserVO.getPassword())) {
+            throw new ExtenException("register", ExceptionEnum.PARAM_VALIDATED_UN_PASS_NULL.getCode(),
+                    ExceptionEnum.PARAM_VALIDATED_UN_PASS_NULL.getMessage());
         }
         // 用户注册需将用户密码进行加密
         registerUserVO.setPassword(new BCryptPasswordEncoder().encode(registerUserVO.getPassword()));
-        try {
-            // 注册成功，为其分配默认角色
-            VenusUserVO userByName = venusUserService.getUserByName(registerUserVO.getUsername());
-            if (userByName == null) {
-                venusUserService.addVenusUser(registerUserVO);
-            } else {
-                logger.info("VenusUserController register end ... result:{}", "注册失败,用户名已存在");
-                return ResultVO.fail("注册失败,用户名已存在");
-            }
-            return ResultVO.success();
-        } catch (Exception e) {
-            logger.error("VenusUserController register error!", e);
-            return ResultVO.fail("注册失败");
+        // 注册成功，为其分配默认角色
+        VenusUserVO userByName = venusUserService.getUserByName(registerUserVO.getUsername());
+        if (userByName == null) {
+            venusUserService.addVenusUser(registerUserVO);
+            return new ResultVO();
+        } else {
+            logger.info("VenusUserController register end ... result:{}", "注册失败,用户名已存在");
+            throw new ExtenException("register", ResultEnum.FAIL.getCode(), ResultEnum.FAIL.getMsg(),
+                    new ErrorDataVO("name", "用户名已存在"));
         }
     }
 
@@ -119,10 +115,11 @@ public class VenusUserController {
             records = allUser.getRecords();
         } catch (Exception e) {
             logger.error("VenusUserController getAllUser error ...", e);
-            return ResultVO.fail("系统错误！");
+//            return ResultVO.fail("系统错误！");
         }
         logger.info("VenusUserController getAllUser end ...result:{}", records);
-        return ResultVO.success(records);
+//        return ResultVO.success(records);
+        return null;
     }
 
     /**
@@ -144,10 +141,11 @@ public class VenusUserController {
             userByName = venusUserService.getUserByName(username);
         } catch (Exception e) {
             logger.error("VenusUserController getUserByName error ...", e);
-            return ResultVO.fail("系统错误！");
+//            return ResultVO.fail("系统错误！");
         }
         logger.info("VenusUserController getUserByName end ...result:{}", userByName);
-        return ResultVO.success(userByName);
+//        return ResultVO.success(userByName);
+        return null;
     }
 
     @PostMapping("/logout")
@@ -163,10 +161,11 @@ public class VenusUserController {
 
         logger.info("VenusUserController getUserByName delAccount ... Username:{}", username);
         if (StringUtils.isBlank(username)) {
-            return ResultVO.fail(ResultCodeEnum.PARAMS_ERROR_NULL);
+//            return ResultVO.fail(ResultCodeEnum.PARAMS_ERROR_NULL);
         }
         // 需将用户表相关用户和权限删除
         logger.info("VenusUserController getUserByName end");
-        return ResultVO.success();
+//        return ResultVO.success();
+        return null;
     }
 }

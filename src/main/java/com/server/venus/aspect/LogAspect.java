@@ -3,18 +3,15 @@ package com.server.venus.aspect;
 import com.alibaba.fastjson.JSON;
 import com.server.venus.annotation.LogAnnotation;
 import com.server.venus.entity.Log;
-import com.server.venus.enums.ResultEnum;
 import com.server.venus.service.IVenusLogService;
 import com.server.venus.utils.IpUtils;
 import com.server.venus.utils.TokenUtils;
-import com.server.venus.vo.ResultVO;
 import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +22,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
-import java.util.Enumeration;
 
 /**
  * 项目名称：venus-admin-server

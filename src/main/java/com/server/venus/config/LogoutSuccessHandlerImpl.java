@@ -1,8 +1,6 @@
 package com.server.venus.config;
 
 import com.alibaba.fastjson.JSON;
-import com.server.venus.enums.ResultEnum;
-import com.server.venus.vo.ResultVO;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -30,7 +28,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
 
         response.setCharacterEncoding("utf-8");
         response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JSON.toJSONString(ResultVO.success(ResultEnum.USER_LOGOUT_SUCCESS)));
+//        response.getWriter().write(JSON.toJSONString(ResultVO.success(ResultEnum.USER_LOGOUT_SUCCESS)));
     }
 
 }
