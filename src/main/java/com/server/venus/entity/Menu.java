@@ -52,7 +52,7 @@ public class Menu {
     /**
      * 菜单允许权限
      */
-    private List<UserRole> roles;
+    private List<Role> roles;
 
     public Long getId() {
         return id;
@@ -134,11 +134,11 @@ public class Menu {
         this.enabled = enabled;
     }
 
-    public List<UserRole> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<UserRole> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 

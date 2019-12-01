@@ -1,7 +1,7 @@
 package com.server.venus.filter;
 
 import com.server.venus.entity.Menu;
-import com.server.venus.entity.UserRole;
+import com.server.venus.entity.Role;
 import com.server.venus.service.IVenusMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
@@ -46,7 +46,7 @@ public class FilterInvocationSecurityMetadataSourceImpl implements FilterInvocat
         List<Menu> allMenu = menuService.getAllMenu();
         for(Menu menu : allMenu){
             if(antPathMatcher.match(requestUrl, menu.getUrl()) && menu.getRoles().size() > 0){
-                List<UserRole> roleList = menu.getRoles();
+                List<Role> roleList = menu.getRoles();
                 String[] role = new String[roleList.size()];
                 for(int i = 0; i < roleList.size(); i++ ){
                     role[i] = roleList.get(i).getRoleName();

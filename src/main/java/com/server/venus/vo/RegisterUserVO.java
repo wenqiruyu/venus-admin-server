@@ -17,6 +17,12 @@ import java.util.List;
 public class RegisterUserVO {
 
     /**
+     * 用户ID
+     */
+    @ApiModelProperty(value = "用户ID", required = true)
+    private Long userId;
+
+    /**
      * 手机号
      */
     @ApiModelProperty(value = "手机号", required = true)
@@ -63,6 +69,14 @@ public class RegisterUserVO {
      */
     @ApiModelProperty(value = "备注", required = true)
     private String remark;
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     public String getPhone() {
         return phone;
@@ -131,7 +145,8 @@ public class RegisterUserVO {
     @Override
     public String toString() {
         return "RegisterUserVO{" +
-                "phone='" + phone + '\'' +
+                "userId='" + userId + '\'' +
+                ", phone='" + phone + '\'' +
                 ", telePhone='" + telePhone + '\'' +
                 ", address='" + address + '\'' +
                 ", username='" + username + '\'' +

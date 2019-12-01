@@ -3,9 +3,11 @@ package com.server.venus.aspect;
 import com.alibaba.fastjson.JSON;
 import com.server.venus.annotation.LogAnnotation;
 import com.server.venus.entity.Log;
+import com.server.venus.enums.ResultEnum;
 import com.server.venus.service.IVenusLogService;
 import com.server.venus.utils.IpUtils;
 import com.server.venus.utils.TokenUtils;
+import com.server.venus.vo.ResultVO;
 import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -109,9 +111,9 @@ public class LogAspect {
         // 保存返回结果
         log.setMessage(JSON.toJSONString(ret));
         // 异常原因
-        if (!StringUtils.equals(result.getCode(), ResultEnum.SUCCESS.getCode())) {
+        if (result.getCode() == ResultEnum.SUCCESS.getCode()) {
             log.setIsEnable(2);
-            log.setExceptionMsg(result.getMessage());
+            log.setExceptionMsg(result.getMsg());
         }
         //保存日志
         venusLogService.addVenusLog(log);

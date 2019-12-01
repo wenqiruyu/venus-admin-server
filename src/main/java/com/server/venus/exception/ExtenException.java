@@ -66,7 +66,6 @@ public class ExtenException extends RuntimeException{
         return code;
     }
 
-    @Override
     public String getMessage() {
         return message;
     }
@@ -75,7 +74,6 @@ public class ExtenException extends RuntimeException{
         return data;
     }
 
-    @Override
     public Throwable getCause() {
         return cause;
     }

@@ -6,6 +6,7 @@ import com.server.venus.enums.ExceptionEnum;
 import com.server.venus.enums.ResultEnum;
 import com.server.venus.exception.ExtenException;
 import com.server.venus.service.IVenusUserService;
+import com.server.venus.utils.IdWorkerUtils;
 import com.server.venus.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -15,10 +16,12 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,13 +41,19 @@ public class VenusUserController {
 
     private static final Logger logger = LoggerFactory.getLogger(VenusUserController.class);
 
+    @Value("${idWorker.workerId}")
+    private Integer workerId;
+
+    @Value("${idWorker.datacenterId}")
+    private Integer datacenterId;
+
     @Autowired
     private IVenusUserService venusUserService;
 
     /**
      * 开放用户注册功能
      *
-     * @param registerUserVO
+     * @param registerUserVO 注册对象
      * @return com.server.venus.vo.ResultVO
      * @author yingx
      * @date 2019/10/25
@@ -65,12 +74,18 @@ public class VenusUserController {
         // 注册成功，为其分配默认角色
         VenusUserVO userByName = venusUserService.getUserByName(registerUserVO.getUsername());
         if (userByName == null) {
+            // 生成userId
+            long userId = new IdWorkerUtils(workerId, datacenterId).nextId();
+            registerUserVO.setUserId(userId);
             venusUserService.addVenusUser(registerUserVO);
+            // 注册成功添加用户权限
+
             return new ResultVO();
         } else {
             logger.info("VenusUserController register end ... result:{}", "注册失败,用户名已存在");
-            throw new ExtenException("register", ResultEnum.FAIL.getCode(), ResultEnum.FAIL.getMsg(),
-                    new ErrorDataVO("name", "用户名已存在"));
+            List<ErrorDataVO> errorList = new ArrayList<>();
+            errorList.add(new ErrorDataVO("name", "用户名已存在"));
+            throw new ExtenException("register", ResultEnum.FAIL.getCode(), ResultEnum.FAIL.getMsg(), errorList);
         }
     }
 

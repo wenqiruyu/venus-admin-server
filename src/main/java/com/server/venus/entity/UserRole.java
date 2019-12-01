@@ -1,59 +1,48 @@
 package com.server.venus.entity;
 
 /**
- * 项目名称：venus
+ * 项目名称：venus-admin-server
  * 类名称：UserRole
- * 类描述：用户权限表
+ * 类描述：用户和权限关联关系
  * 创建人：yingx
- * 创建时间： 2019/10/24
+ * 创建时间： 2019/12/2
  * 修改人：yingx
- * 修改时间： 2019/10/24
+ * 修改时间： 2019/12/2
  * 修改备注：
  */
 public class UserRole {
 
-    private Long id;
+    /**
+     * 权限编号
+     */
+    private Long roleId;
 
     /**
-     * 用户权限名
+     * 用户Id
      */
-    private String roleName;
+    private Long userId;
 
-    /**
-     * 权限中文名
-     */
-    private String nameZh;
-
-    public Long getId() {
-        return id;
+    public Long getRoleId() {
+        return roleId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 
-    public String getRoleName() {
-        return roleName;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
-
-    public String getNameZh() {
-        return nameZh;
-    }
-
-    public void setNameZh(String nameZh) {
-        this.nameZh = nameZh;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     @Override
     public String toString() {
         return "UserRole{" +
-                "id=" + id +
-                ", roleName='" + roleName + '\'' +
-                ", nameZh='" + nameZh + '\'' +
+                "roleId=" + roleId +
+                ", userId=" + userId +
                 '}';
     }
 }

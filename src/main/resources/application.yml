@@ -24,3 +24,9 @@ eureka:
 
 swagger2:
   enable: true
+  datacenterId
+
+# 分布式唯一ID生成器 workerId 机器ID datacenterId 数据标识ID
+idWorker:
+  workerId: 0
+  datacenterId: 1

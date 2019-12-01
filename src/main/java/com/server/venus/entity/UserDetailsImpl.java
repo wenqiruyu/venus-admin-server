@@ -50,7 +50,7 @@ public class UserDetailsImpl implements UserDetails {
     /**
      * 用户权限
      */
-    private List<UserRole> roles;
+    private List<Role> roles;
 
     /**
      * 用户头像
@@ -102,11 +102,11 @@ public class UserDetailsImpl implements UserDetails {
         this.password = password;
     }
 
-    public List<UserRole> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<UserRole> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 
@@ -130,7 +130,7 @@ public class UserDetailsImpl implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for (UserRole role : this.roles) {
+        for (Role role : this.roles) {
             authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
         }
         return authorities;

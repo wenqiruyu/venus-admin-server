@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.venus.utils.Constants;
 import com.server.venus.utils.TokenUtils;
 import com.server.venus.vo.LoginUserVO;
+import com.server.venus.vo.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -68,7 +69,7 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
         String token = TokenUtils.getToken(userDetail.getUsername(), false);
         response.setHeader("token", Constants.TOKEN_PREFIX + token);
 //        response.getWriter().write(JSON.toJSONString(ResultVO.success(Constants.TOKEN_PREFIX + token)));
-        response.getWriter().write(objectMapper.writeValueAsString(ResultVO.success(Constants.TOKEN_PREFIX + token)));
+        response.getWriter().write(objectMapper.writeValueAsString(new ResultVO(Constants.TOKEN_PREFIX + token)));
     }
 
     @Override
