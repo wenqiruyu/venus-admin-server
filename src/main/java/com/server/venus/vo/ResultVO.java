@@ -64,6 +64,12 @@ public class ResultVO<T> implements Serializable {
         this.setMsg(ResultEnum.SUCCESS.getMsg());
     }
 
+    public ResultVO(Long code, String message) {
+
+        this.setCode(code);
+        this.setMsg(message);
+    }
+
     public ResultVO(String domain, Long code, String message) {
 
         this.setDomain(domain);

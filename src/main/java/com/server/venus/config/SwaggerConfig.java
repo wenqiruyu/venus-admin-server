@@ -45,14 +45,16 @@ public class SwaggerConfig {
         tokenPar.name("token").description("令牌").modelRef(new ModelRef("String")).parameterType("header").required(true).build();
         pars.add(tokenPar.build());
 
-        return new Docket(DocumentationType.SWAGGER_2)
-                // .enable(swagger2Enable) // 用于控制swagger是否加载，用于生产环境中进行对swagger的关闭
+        return new Docket(DocumentationType.SWAGGER_2).
+                useDefaultResponseMessages(false)
+                 .enable(swagger2Enable) // 用于控制swagger是否加载，用于生产环境中进行对swagger的关闭
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class)) // 采用包含注解的方式来确定要显示的接口
                 //.apis(RequestHandlerSelectors.basePackage("com.swagger.wen.controller")) // 采用扫描包的方式来确定要显示的接口
                 .paths(PathSelectors.any())
-                .build();
+                .build()
+                .globalOperationParameters(pars);
     }
 
     private ApiInfo apiInfo() {

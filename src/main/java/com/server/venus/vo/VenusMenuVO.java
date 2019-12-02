@@ -60,7 +60,7 @@ public class VenusMenuVO {
      * 菜单允许权限
      */
     @ApiModelProperty(value = "菜单允许权限", required = true)
-    private List<VenusUserRoleVO> roles;
+    private List<VenusRoleVO> roles;
 
     public String getUrl() {
         return url;
@@ -126,11 +126,11 @@ public class VenusMenuVO {
         this.parentId = parentId;
     }
 
-    public List<VenusUserRoleVO> getRoles() {
+    public List<VenusRoleVO> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<VenusUserRoleVO> roles) {
+    public void setRoles(List<VenusRoleVO> roles) {
         this.roles = roles;
     }
 

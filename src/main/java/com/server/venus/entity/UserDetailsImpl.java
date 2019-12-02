@@ -23,6 +23,11 @@ public class UserDetailsImpl implements UserDetails {
     private Long id;
 
     /**
+     * 用户id
+     */
+    private Long userId;
+
+    /**
      * 用户名
      */
     private String username;
@@ -68,6 +73,14 @@ public class UserDetailsImpl implements UserDetails {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getPhone() {
@@ -170,11 +183,12 @@ public class UserDetailsImpl implements UserDetails {
     public String toString() {
         return "UserDetailsImpl{" +
                 "id=" + id +
+                ", userId=" + userId +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
                 ", phone='" + phone + '\'' +
                 ", telePhone='" + telePhone + '\'' +
                 ", address='" + address + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
                 ", roles=" + roles +
                 ", userFace='" + userFace + '\'' +
                 ", remark='" + remark + '\'' +

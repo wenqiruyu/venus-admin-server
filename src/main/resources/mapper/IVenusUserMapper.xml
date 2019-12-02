@@ -3,6 +3,7 @@
 <mapper namespace="com.server.venus.mapper.IVenusUserMapper">
     <resultMap id="userResultMap" type="com.server.venus.vo.VenusUserVO">
         <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
         <result column="username" jdbcType="VARCHAR" property="username"/>
         <result column="phone" jdbcType="VARCHAR" property="phone"/>
         <result column="telePhone" jdbcType="VARCHAR" property="telePhone"/>
@@ -65,8 +66,8 @@
     </select>-->
 
     <insert id="addVenusUser">
-        insert into venus_user(username, password)
-        values(#{username}, #{password})
+        insert into venus_user(user_id, username, password)
+        values(#{userId}, #{username}, #{password})
     </insert>
 
 </mapper>

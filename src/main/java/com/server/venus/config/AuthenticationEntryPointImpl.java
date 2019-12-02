@@ -1,6 +1,10 @@
 package com.server.venus.config;
 
 import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.server.venus.enums.ResultEnum;
+import com.server.venus.vo.ResultVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -23,11 +27,15 @@ import java.io.IOException;
 @Component
 public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
 
         response.setCharacterEncoding("utf-8");
         response.setContentType("application/json; charset=utf-8");
-//        response.getWriter().write(JSON.toJSONString(ResultVO.fail(ResultEnum.USER_NEED_AUTHORITIES)));
+        response.getWriter().write(objectMapper.writeValueAsString(new ResultVO<>("login",
+                ResultEnum.USER_NEED_AUTHORITIES.getCode(), ResultEnum.USER_NEED_AUTHORITIES.getMsg())));
     }
 }

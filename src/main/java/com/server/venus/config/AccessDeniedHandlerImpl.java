@@ -1,6 +1,10 @@
 package com.server.venus.config;
 
-import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.server.venus.annotation.LogAnnotation;
+import com.server.venus.enums.ResultEnum;
+import com.server.venus.vo.ResultVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
@@ -23,11 +27,16 @@ import java.io.IOException;
 @Component
 public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Override
+    @LogAnnotation("用户登录失败")
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e) throws IOException, ServletException {
 
         response.setCharacterEncoding("utf-8");
         response.setContentType("application/json;charset=utf-8");
-//        response.getWriter().write(JSON.toJSONString(ResultVO.fail(ResultEnum.USER_NO_ACCESS)));
+        response.getWriter().write(objectMapper.writeValueAsString(new ResultVO<>("login",
+                ResultEnum.INVALID_ACCESS.getCode(), ResultEnum.INVALID_ACCESS.getMsg())));
     }
 }

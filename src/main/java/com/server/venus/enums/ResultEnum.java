@@ -18,7 +18,12 @@ public enum ResultEnum {
     SYS_ERROR(402L, "系统错误"),
     PARAMS_ERROR(403L, "参数错误 "),
     PARAMS_ERROR_FORMAT(403001L, "参数传递方式不正确, 请使用application/json传递参数"),
-    PARAMS_ERROR_NULL(403002L, "参数为空");
+    PARAMS_ERROR_NULL(403002L, "参数为空"),
+
+    UNKNOWN_USER(1000L, "用户名不存在或密码错误"),
+    INVALID_ACCESS(1001L, "用户无权访问"),
+    USER_NEED_AUTHORITIES(1002L, "用户未进行登录"),
+    USER_LOGOUT_SUCCESS(1003L, "用户注销登录成功");
 
     private Long code;
 

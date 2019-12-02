@@ -22,8 +22,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * 项目名称：venus-admin-server
@@ -67,7 +73,7 @@ public class LogAspect {
             String token = request.getHeader("token");
             Object[] args = joinPoint.getArgs();
             // 操作用户名 用户的登陆注册没有token
-            String username = "admin";
+            String username = "";
             if (StringUtils.isNotBlank(token)) {
                 username = TokenUtils.getUsernameByToken(token);
             }
@@ -106,17 +112,28 @@ public class LogAspect {
     @AfterReturning(returning = "ret", pointcut = "controllerAspect()")
     public void doAfterReturning(Object ret) throws Throwable {
 
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
         // 处理完请求，返回内容
         ResultVO result = (ResultVO) ret;
-        // 保存返回结果
-        log.setMessage(JSON.toJSONString(ret));
-        // 异常原因
-        if (result.getCode() == ResultEnum.SUCCESS.getCode()) {
-            log.setIsEnable(2);
-            log.setExceptionMsg(result.getMsg());
+        if (result != null) {
+            // 保存返回结果
+            log.setMessage(JSON.toJSONString(ret));
+            // 异常原因
+            if (result.getCode() != ResultEnum.SUCCESS.getCode()) {
+                log.setIsEnable(3);
+                log.setExceptionMsg(result.getMsg());
+            }
+        } else {
+            // 处理登录情况
+            if ("/venus-admin-server/user/login".equals(log.getApi()) && "用户登录失败".equals(log.getLogName())) {
+                log.setLogName("用户登陆");
+                log.setIsEnable(2);
+                log.setMessage(ResultEnum.USER_NEED_AUTHORITIES.getMsg());
+            }
         }
         //保存日志
         venusLogService.addVenusLog(log);
+        logger.error("LogAspect addVenusLog end ...log:{}", log);
     }
 
     /**

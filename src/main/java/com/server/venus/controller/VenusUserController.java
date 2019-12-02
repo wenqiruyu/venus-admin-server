@@ -2,9 +2,11 @@ package com.server.venus.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.server.venus.annotation.LogAnnotation;
+import com.server.venus.entity.UserRole;
 import com.server.venus.enums.ExceptionEnum;
 import com.server.venus.enums.ResultEnum;
 import com.server.venus.exception.ExtenException;
+import com.server.venus.service.IVenusUserRoleService;
 import com.server.venus.service.IVenusUserService;
 import com.server.venus.utils.IdWorkerUtils;
 import com.server.venus.vo.*;
@@ -50,6 +52,9 @@ public class VenusUserController {
     @Autowired
     private IVenusUserService venusUserService;
 
+    @Autowired
+    private IVenusUserRoleService venusUserRoleService;
+
     /**
      * 开放用户注册功能
      *
@@ -60,7 +65,7 @@ public class VenusUserController {
      */
     @LogAnnotation(value = "用户注册")
     @PostMapping("/register")
-    @ApiOperation(value = "用户注册", notes = "开放用户注册功能", position = 2)
+    @ApiOperation(value = "用户注册", notes = "开放用户注册功能", position = 1)
     public ResultVO register(@RequestBody RegisterUserVO registerUserVO, HttpServletRequest request) {
 
         logger.info("VenusUserController register start ... Username:{}, Password:{}",
@@ -78,8 +83,12 @@ public class VenusUserController {
             long userId = new IdWorkerUtils(workerId, datacenterId).nextId();
             registerUserVO.setUserId(userId);
             venusUserService.addVenusUser(registerUserVO);
-            // 注册成功添加用户权限
-
+            // 注册成功添加用户权限 注册用户都默认为普通用户
+            VenusUserRoleVO userRoleVO = new VenusUserRoleVO();
+            userRoleVO.setRoleId(1L);
+            userRoleVO.setUserId(userId);
+            venusUserRoleService.addUserRole(userRoleVO);
+            logger.info("VenusUserController register end ... userId:{}", userId);
             return new ResultVO();
         } else {
             logger.info("VenusUserController register end ... result:{}", "注册失败,用户名已存在");
@@ -97,6 +106,7 @@ public class VenusUserController {
      * @author yingx
      * @date 2019/10/25
      */
+    @LogAnnotation(value = "用户登录")
     @PostMapping("/login")
     @ApiOperation(value = "用户登录", notes = "使用spring security自带的登录功能", position = 2)
     public ResultVO login(@RequestBody LoginUserVO loginUserVO) {
@@ -116,7 +126,7 @@ public class VenusUserController {
      * @date 2019/10/24
      */
     @PostMapping("/getAllUser/{page}/{pageSize}")
-    @ApiOperation(value = "获取全部户用信息", notes = "分页查询全部用户信息", position = 2)
+    @ApiOperation(value = "获取全部户用信息", notes = "分页查询全部用户信息", position = 3)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "页数", required = true, dataType = "int"),
             @ApiImplicitParam(name = "pageSize", value = "每页个数", required = true, dataType = "int")
@@ -130,11 +140,10 @@ public class VenusUserController {
             records = allUser.getRecords();
         } catch (Exception e) {
             logger.error("VenusUserController getAllUser error ...", e);
-//            return ResultVO.fail("系统错误！");
+            throw new ExtenException("getAllUser", ExceptionEnum.UNEXPECTED_ERROR.getCode(), ExceptionEnum.UNEXPECTED_ERROR.getMessage());
         }
         logger.info("VenusUserController getAllUser end ...result:{}", records);
-//        return ResultVO.success(records);
-        return null;
+        return new ResultVO(records);
     }
 
     /**
@@ -145,42 +154,46 @@ public class VenusUserController {
      * @author yingx
      * @date 2019/10/25
      */
-    @PostMapping("getUser/name")
-    @ApiOperation(value = "查询用户信息（用户名）", notes = "根据用户名查询用户信息", position = 2)
+    @PostMapping("/getUser/name")
+    @ApiOperation(value = "查询用户信息（用户名）", notes = "根据用户名查询用户信息", position = 4)
     @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String")
     public ResultVO getUserByName(@RequestParam String username) {
 
         logger.info("VenusUserController getUserByName start ...username:{}", username);
+        if (StringUtils.isBlank(username)) {
+            throw new ExtenException("getUser", ExceptionEnum.PARAM_VALIDATED_UN_PASS_NULL.getCode(),
+                    ExceptionEnum.PARAM_VALIDATED_UN_PASS_NULL.getMessage());
+        }
         VenusUserVO userByName = null;
         try {
             userByName = venusUserService.getUserByName(username);
         } catch (Exception e) {
             logger.error("VenusUserController getUserByName error ...", e);
-//            return ResultVO.fail("系统错误！");
+            throw new ExtenException("getAllUser", ExceptionEnum.UNEXPECTED_ERROR.getCode(), ExceptionEnum.UNEXPECTED_ERROR.getMessage());
         }
         logger.info("VenusUserController getUserByName end ...result:{}", userByName);
-//        return ResultVO.success(userByName);
-        return null;
+        return new ResultVO(userByName);
     }
 
     @PostMapping("/logout")
-    @ApiOperation(value = "用户注销登录", tags = "用户进行账号注销操作", position = 2)
+    @ApiOperation(value = "用户注销登录", tags = "用户进行账号注销操作", position = 5)
     public ResultVO logout() {
 
         return null;
     }
 
     @DeleteMapping("/delete")
+    @ApiOperation(value = "删除用户（用户名）", tags = "根据用户名进行删除用户", position = 6)
     @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String")
     public ResultVO delAccount(@RequestParam String username) {
 
         logger.info("VenusUserController getUserByName delAccount ... Username:{}", username);
         if (StringUtils.isBlank(username)) {
-//            return ResultVO.fail(ResultCodeEnum.PARAMS_ERROR_NULL);
+            throw new ExtenException("register", ExceptionEnum.PARAM_VALIDATED_UN_PASS_NULL.getCode(),
+                    ExceptionEnum.PARAM_VALIDATED_UN_PASS_NULL.getMessage());
         }
         // 需将用户表相关用户和权限删除
         logger.info("VenusUserController getUserByName end");
-//        return ResultVO.success();
-        return null;
+        return new ResultVO();
     }
 }

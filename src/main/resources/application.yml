@@ -5,7 +5,7 @@ server:
 
 spring:
   application:
-    name: venus-server
+    name: venus-admin-server
   devtools:
     restart:
       enabled: true  #���ÿ����Ȳ���
@@ -24,9 +24,8 @@ eureka:
 
 swagger2:
   enable: true
-  datacenterId
 
-# 分布式唯一ID生成器 workerId 机器ID datacenterId 数据标识ID
+#分布式唯一ID生成器 workerId 机器ID datacenterId 数据标识ID
 idWorker:
   workerId: 0
   datacenterId: 1

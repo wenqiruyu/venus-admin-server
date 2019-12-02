@@ -1,39 +1,30 @@
-package com.server.venus.entity;
+package com.server.venus.vo;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 项目名称：venus
- * 类名称：Role
- * 类描述：用户权限表
+ * 类名称：VenusRoleVO
+ * 类描述：TODO
  * 创建人：yingx
- * 创建时间： 2019/10/24
+ * 创建时间： 2019/10/25
  * 修改人：yingx
- * 修改时间： 2019/10/24
+ * 修改时间： 2019/10/25
  * 修改备注：
  */
-public class Role {
-
-    /**
-     * 权限表id
-     */
-    private Long id;
+public class VenusRoleVO {
 
     /**
      * 用户权限名
      */
+    @ApiModelProperty(value = "用户权限名", required = true)
     private String roleName;
 
     /**
      * 权限中文名
      */
+    @ApiModelProperty(value = "权限中文名", required = true)
     private String nameZh;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getRoleName() {
         return roleName;
@@ -53,9 +44,8 @@ public class Role {
 
     @Override
     public String toString() {
-        return "Role{" +
-                "id=" + id +
-                ", roleName='" + roleName + '\'' +
+        return "VenusRoleVO{" +
+                "roleName='" + roleName + '\'' +
                 ", nameZh='" + nameZh + '\'' +
                 '}';
     }

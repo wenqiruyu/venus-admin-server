@@ -1,6 +1,11 @@
 package com.server.venus.config;
 
 import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.server.venus.annotation.LogAnnotation;
+import com.server.venus.enums.ResultEnum;
+import com.server.venus.vo.ResultVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -23,12 +28,17 @@ import java.io.IOException;
 @Component
 public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Override
+    @LogAnnotation("用户注销登录成功")
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
         response.setCharacterEncoding("utf-8");
         response.setContentType("application/json;charset=utf-8");
-//        response.getWriter().write(JSON.toJSONString(ResultVO.success(ResultEnum.USER_LOGOUT_SUCCESS)));
+        response.getWriter().write(objectMapper.writeValueAsString(new ResultVO<>(
+                ResultEnum.USER_LOGOUT_SUCCESS.getCode(), ResultEnum.USER_LOGOUT_SUCCESS.getMsg())));
     }
 
 }

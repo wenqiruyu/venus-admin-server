@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS `venus_user`;
 CREATE TABLE `venus_user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户id',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户表id',
+  `user_id` bigint(20) DEFAULT NULL COMMENT '用户id',
   `username` varchar(255) DEFAULT NULL COMMENT '昵称',
   `password` varchar(255) DEFAULT NULL COMMENT '密码',
   `phone` char(11) DEFAULT NULL COMMENT '手机号码',
@@ -18,7 +19,7 @@ CREATE TABLE `venus_user` (
 
 DROP TABLE IF EXISTS `venus_user_role`;
 CREATE TABLE `venus_user_role` (
-  `user_id` int(11) DEFAULT NULL COMMENT '用户表id',
+  `user_id` bigint(20) DEFAULT NULL COMMENT '用户表id',
   `role_id` int(11) DEFAULT NULL COMMENT '角色表id',
   `enabled` tinyint(1) DEFAULT '1' COMMENT '是否有效'
 ) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8 COMMENT '启明星用户角色表';
@@ -35,6 +36,14 @@ CREATE TABLE `venus_role` (
   `last_update_by` varchar(20) NOT NULL DEFAULT 'admin' COMMENT '修改者，记录修改者信息',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8 COMMENT '启明星用户角色表';
+
+INSERT INTO `venus`.`venus_role` (`id`, `role_name_en`, `role_name_zh`, `enabled`, `create_time`, `update_time`, `create_by`, `last_update_by`)
+VALUES ('1', 'ordinary', '普通用户', '1', '2019-12-02 10:01:12', '2019-12-02 10:02:30', 'admin', 'admin');
+INSERT INTO `venus`.`venus_role` (`id`, `role_name_en`, `role_name_zh`, `enabled`, `create_time`, `update_time`, `create_by`, `last_update_by`)
+VALUES ('2', 'member', '会员用户', '1', '2019-12-02 10:01:36', '2019-12-02 10:02:08', 'admin', 'admin');
+INSERT INTO `venus`.`venus_role` (`id`, `role_name_en`, `role_name_zh`, `enabled`, `create_time`, `update_time`, `create_by`, `last_update_by`)
+VALUES ('3', 'admin', '管理员', '1', '2019-12-02 10:02:25', '2019-12-02 10:02:27', 'admin', 'admin');
+
 
 DROP TABLE IF EXISTS `venus_menu`;
 CREATE TABLE `venus_menu` (
@@ -67,7 +76,7 @@ CREATE TABLE `venus_account_log`  (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '用户账户操作日志主键',
   `log_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '日志名称(login,register,logout)',
   `user_id` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户id',
-	`ip` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户ip',
+  `ip` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户ip',
   `is_success` tinyint(4) NULL DEFAULT NULL COMMENT '是否执行成功(0失败1成功)',
   `message` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '具体消息',
   `enabled` tinyint(1) DEFAULT '1' COMMENT '是否有效',
@@ -89,7 +98,7 @@ CREATE TABLE `venus_operation_log`  (
   `request_type` varchar(30) NULL DEFAULT NULL COMMENT '请求类型',
   `exception_msg` varchar(255) NULL DEFAULT NULL COMMENT '出现异常记录异常信息',
   `message` varchar(255) NULL DEFAULT NULL COMMENT '返回具体消息',
-  `enabled` tinyint(1) DEFAULT '1' COMMENT '是否有效 0有效 1删除 2异常日志',
+  `enabled` tinyint(1) DEFAULT '1' COMMENT '是否有效 0删除 1返回成功 2返回失败 3异常日志',
   `create_time` datetime DEFAULT NULL,
   `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `create_by` varchar(20) NOT NULL DEFAULT 'admin' COMMENT '创建者，记录创建者信息',

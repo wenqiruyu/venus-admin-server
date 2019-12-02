@@ -56,7 +56,7 @@ public class RegisterUserVO {
      * 用户权限
      */
     @ApiModelProperty(value = "用户权限", required = true)
-    private List<VenusUserRoleVO> roles;
+    private List<VenusRoleVO> roles;
 
     /**
      * 用户头像
@@ -118,11 +118,11 @@ public class RegisterUserVO {
         this.password = password;
     }
 
-    public List<VenusUserRoleVO> getRoles() {
+    public List<VenusRoleVO> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<VenusUserRoleVO> roles) {
+    public void setRoles(List<VenusRoleVO> roles) {
         this.roles = roles;
     }
 
