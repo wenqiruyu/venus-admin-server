@@ -63,6 +63,7 @@ public class VenusUserController {
      * @author yingx
      * @date 2019/10/25
      */
+    @CrossOrigin
     @LogAnnotation(value = "用户注册")
     @PostMapping("/register")
     @ApiOperation(value = "用户注册", notes = "开放用户注册功能", position = 1)
@@ -106,6 +107,7 @@ public class VenusUserController {
      * @author yingx
      * @date 2019/10/25
      */
+    @CrossOrigin
     @LogAnnotation(value = "用户登录")
     @PostMapping("/login")
     @ApiOperation(value = "用户登录", notes = "使用spring security自带的登录功能", position = 2)

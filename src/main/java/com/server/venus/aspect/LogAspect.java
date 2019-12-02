@@ -73,7 +73,7 @@ public class LogAspect {
             String token = request.getHeader("token");
             Object[] args = joinPoint.getArgs();
             // 操作用户名 用户的登陆注册没有token
-            String username = "";
+            String username = request.getParameter("username");
             if (StringUtils.isNotBlank(token)) {
                 username = TokenUtils.getUsernameByToken(token);
             }
