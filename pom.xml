@@ -12,7 +12,7 @@
     <groupId>com.server.venus</groupId>
     <artifactId>venus-admin-server</artifactId>
     <version>1.0.0</version>
-    <name>venus-server</name>
+    <name>venus-admin-server</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
