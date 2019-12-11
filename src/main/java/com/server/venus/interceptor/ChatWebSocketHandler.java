@@ -1,5 +1,9 @@
 package com.server.venus.interceptor;
 
+import com.alibaba.fastjson.JSON;
+import com.server.venus.vo.ResultVO;
+import com.server.venus.vo.VenusChatVO;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -45,14 +49,11 @@ public class ChatWebSocketHandler {
     public void onOpen(Session session, @PathParam("username") String username) {
 
         this.session = session;
+        this.username = username;
         websocket.add(this);
         addOnlineCount();
+        sendAllMessage(username + "进入了聊天室哦", "venus");
         System.out.println("当前在线人数：" + COUNT);
-        try {
-            sendMessage("连接成功");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -64,8 +65,9 @@ public class ChatWebSocketHandler {
      * @date 2019/12/6
      */
     @OnClose
-    public void onClose() {
+    public void onClose(@PathParam("username") String username) {
 
+        //sendAllMessage(username + "退出了聊天室哦", username);
         websocket.remove(this);
         subOnlineCount();
         System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount());
@@ -81,17 +83,10 @@ public class ChatWebSocketHandler {
      * @date 2019/12/6
      */
     @OnMessage
-    public void onMessage(String message, Session session) {
+    public void onMessage(String message, Session session, @PathParam("username") String username) {
 
         System.out.println("server 收到的信息是：" + message);
-        //群发消息
-        for (ChatWebSocketHandler item : websocket) {
-            try {
-                item.sendMessage(message);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        sendAllMessage(message, username);
     }
 
     /**
@@ -118,9 +113,21 @@ public class ChatWebSocketHandler {
      * @author yingx
      * @date 2019/12/6
      */
-    public void sendMessage(String message) throws IOException {
+    public void sendMessage(String message, String username) {
 
-        this.session.getBasicRemote().sendText(message);
+        try {
+            VenusChatVO venusChatVO = new VenusChatVO();
+            if (StringUtils.isNotBlank(message) && StringUtils.isNotBlank(username)) {
+                venusChatVO.setUsername(username);
+                venusChatVO.setChatMessage(message);
+            } else {
+                venusChatVO.setUsername("venus");
+                venusChatVO.setChatMessage("服务器出现错误，请稍后再试。。。^-^");
+            }
+            this.session.getBasicRemote().sendText(JSON.toJSONString(new ResultVO(venusChatVO)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -132,14 +139,10 @@ public class ChatWebSocketHandler {
      * @author yingx
      * @date 2019/12/6
      */
-    public static void sendAllMessage(String message) throws IOException {
+    public static void sendAllMessage(String message, @PathParam("username") String username) {
 
         for (ChatWebSocketHandler item : websocket) {
-            try {
-                item.sendMessage(message);
-            } catch (IOException e) {
-                continue;
-            }
+            item.sendMessage(message, username);
         }
     }
 
