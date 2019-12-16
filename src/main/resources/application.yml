@@ -16,7 +16,13 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: root
-
+  # Elasticsearch配置文件，和Elasticsearch中的Elasticsearch.yml相关联
+  data:
+    elasticsearch:
+      cluster-name: venus-admin-server
+      cluster-nodes: 122.51.166.19:9300
+      repositories:
+        enabled: true
 eureka:
   client:
     service-url:
