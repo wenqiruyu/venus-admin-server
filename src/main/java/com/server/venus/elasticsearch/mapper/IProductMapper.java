@@ -3,6 +3,8 @@ package com.server.venus.elasticsearch.mapper;
 import com.server.venus.elasticsearch.entity.Product;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
+import java.util.List;
+
 /**
  * 项目名称：venus-admin-server
  * 类名称：IProductMapper
@@ -14,4 +16,8 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
  * 修改备注： Product:实体类名 Long:实体类中主键的数据类型
  */
 public interface IProductMapper extends ElasticsearchRepository<Product, Long> {
+
+    Product queryProductById(Long id);
+
+    List<Product> findByPriceBetween(Double price, Double price1);
 }

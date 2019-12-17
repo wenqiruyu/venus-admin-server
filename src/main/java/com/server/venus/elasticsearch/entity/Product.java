@@ -33,7 +33,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
  *                      store：是否存储，布尔类型，默认是false
  *                      analyzer：分词器名称，这里的ik_max_word即使用ik分词器
  */
-@Document(indexName = "Product", type = "docs", shards = 1, replicas = 0)
+@Document(indexName = "venus-admin-server", type = "product", shards = 1, replicas = 0)
 public class Product {
 
     @Id
@@ -42,31 +42,31 @@ public class Product {
     /**
      * 标题
      */
-    @Field(type = FieldType.Text, analyzer = "ik_max_word")
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", store = true)
     private String title;
 
     /**
      * 分类
      */
-    @Field(type = FieldType.Keyword)
+    @Field(type = FieldType.Text, store = true)
     private String category;
 
     /**
      * 品牌
      */
-    @Field(type = FieldType.Keyword)
+    @Field(type = FieldType.Text, store = true)
     private String brand;
 
     /**
      * 价格
      */
-    @Field(type = FieldType.Double)
+    @Field(type = FieldType.Double, store = true)
     private Double price;
 
     /**
      * 图片地址
      */
-    @Field(type = FieldType.Keyword, index = false)
+    @Field(type = FieldType.Keyword, index = false, store = true)
     private String images;
 
     public Long getId() {
