@@ -23,6 +23,10 @@ spring:
       cluster-nodes: 122.51.166.19:9300
       repositories:
         enabled: true
+  servlet:
+    multipart:
+      enabled: true #开启文件上传
+      max-file-size: 10MB #限制文件上传大小为10M
 eureka:
   client:
     service-url:
@@ -35,3 +39,10 @@ swagger2:
 idWorker:
   workerId: 0
   datacenterId: 1
+
+# MinIO对象存储相关配置
+minio:
+  endpoint: http://122.51.166.19:9000 #MinIO服务所在地址
+  bucketName: venus #存储桶名称
+  accessKey: minioadmin #访问的key
+  secretKey: minioadmin #访问的秘钥

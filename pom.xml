@@ -171,6 +171,13 @@
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
 
+        <!--MinIO对象存储-->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>6.0.8</version>
+        </dependency>
+
         <!--elasticsearch启动器 spring-boot-starter-data-elasticsearch 20191216 对新版的没有集成7.x的es-->
         <!--<dependency>
             <groupId>org.elasticsearch.client</groupId>
