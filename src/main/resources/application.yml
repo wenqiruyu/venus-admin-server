@@ -46,3 +46,9 @@ minio:
   bucketName: venus #存储桶名称
   accessKey: minioadmin #访问的key
   secretKey: minioadmin #访问的秘钥
+
+# mongoDB相关配置信息
+mongodb:
+  host: 122.51.166.19 # mongodb的连接地址
+  port: 27017 # mongodb的连接端口号
+  database: venus # mongodb的连接的数据库
